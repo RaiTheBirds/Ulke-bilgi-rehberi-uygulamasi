@@ -62,7 +62,9 @@ return (
           isFavorite={favorites.some(fav => fav.cca3 === item.cca3)}
           onFavoriteToggle={() => onToggleFavorite(item)}
         />
+        
       )}
+      extraData={favorites}
       ListEmptyComponent={() => (
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyText}>Aradığınız ülke bulunamadı.</Text>
