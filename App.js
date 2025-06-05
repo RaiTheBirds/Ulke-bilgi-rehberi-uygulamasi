@@ -8,9 +8,50 @@ import HomeScreen from './src/screens/HomeScreen';
 import CountryDetailScreen from './src/screens/CountryDetailScreen';
 import AboutScreen from './src/screens/AboutScreen';
 import FavoritesScreen from './src/screens/FavoritesScreen';
+import ContinentsScreen from './src/screens/ContinentsScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+
+const ContinentsStack = createNativeStackNavigator();
+
+function ContinentsStackScreen({ favorites, onToggleFavorite, visited, wantToVisit, noPlan, onSetVisitStatus }) {
+  return (
+    <ContinentsStack.Navigator>
+      <ContinentsStack.Screen
+        name="Kıtalar"
+        options={{ title: 'Kıtalar' }}
+      >
+        {props => (
+          <ContinentsScreen
+            {...props}
+            favorites={favorites}
+            onToggleFavorite={onToggleFavorite}
+          />
+        )}
+      </ContinentsStack.Screen>
+      <ContinentsStack.Screen
+        name="Details"
+        options={{ title: 'Detaylar' }}
+      >
+        {props => {
+          const country = props.route.params.country;
+          return (
+            <CountryDetailScreen
+              {...props}
+              isFavorite={favorites.some(fav => fav.cca3 === country.cca3)}
+              visited={visited}
+              wantToVisit={wantToVisit}
+              noPlan={noPlan}
+              onToggleFavorite={onToggleFavorite}
+              onSetVisitStatus={onSetVisitStatus}
+            />
+          );
+        }}
+      </ContinentsStack.Screen>
+    </ContinentsStack.Navigator>
+  );
+}
 
 function HomeStack({ favorites, onToggleFavorite, visited, wantToVisit, noPlan, onSetVisitStatus }) {
   return (
@@ -126,6 +167,7 @@ const onSetVisitStatus = (status, country) => {
             let iconName;
             if (route.name === 'Ülkeler') iconName = 'globe-outline';
             else if (route.name === 'Listelerim') iconName = 'star-outline';
+            else if (route.name === 'Kıtalar') iconName = 'earth-outline';
             else if (route.name === 'Hakkında') iconName = 'information-circle-outline';
             return <Ionicons name={iconName} size={size} color={color} />;
           },
@@ -133,7 +175,7 @@ const onSetVisitStatus = (status, country) => {
           tabBarInactiveTintColor: 'gray',
         })}
       >
-        <Tab.Screen name="Ülkeler" options={{ title: 'Dünya Ülkeleri', headerShown: false }}>
+        <Tab.Screen name="Ülkeler" options={{ title: 'Ülkeler Listesi', headerShown: false }}>
           {() => (
             <HomeStack
               favorites={favorites}
@@ -145,6 +187,18 @@ const onSetVisitStatus = (status, country) => {
             />
           )}
         </Tab.Screen>
+    <Tab.Screen name="Kıtalar" options={{ title: 'Kıtalar', headerShown: false }}>
+      {() => (
+       <ContinentsStackScreen
+          favorites={favorites}
+          onToggleFavorite={onToggleFavorite}
+          visited={visited}
+          wantToVisit={wantToVisit}
+         noPlan={noPlan}
+         onSetVisitStatus={onSetVisitStatus}
+        />
+     )}
+</Tab.Screen>
         <Tab.Screen name="Listelerim" options={{ title: 'Listelerim', headerShown: false }}>
           {() => (
             <FavoritesStack

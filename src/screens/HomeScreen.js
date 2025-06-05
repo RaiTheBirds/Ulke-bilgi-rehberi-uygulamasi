@@ -49,28 +49,28 @@ export default function HomeScreen({ navigation, favorites, onToggleFavorite }) 
     );
   }
 
-  return (
-    <View style={styles.container}>
-      <SearchBar searchText={searchText} setSearchText={setSearchText} />
-      <FlatList
-        data={filteredCountries}
-        keyExtractor={(item) => item.cca3}
-        renderItem={({ item }) => (
-          <CountryCard
-            country={item}
-            onPress={() => handlePress(item)}
-            isFavorite={favorites.some(fav => fav.cca3 === item.cca3)}
-            onFavoriteToggle={() => onToggleFavorite(item)}
-          />
-        )}
-        ListEmptyComponent={() => (
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>Aradığınız ülke bulunamadı.</Text>
-            <Text style={styles.emptyText}>Belki de böyle bir ülke yoktur :P</Text>
-          </View>
-        )}
-      />
-    </View>
+return (
+  <View style={styles.container}>
+    <SearchBar searchText={searchText} setSearchText={setSearchText} />
+    <FlatList
+      data={filteredCountries.slice().sort((a, b) => a.name.common.localeCompare(b.name.common, 'tr'))}
+      keyExtractor={(item) => item.cca3}
+      renderItem={({ item }) => (
+        <CountryCard
+          country={item}
+          onPress={() => handlePress(item)}
+          isFavorite={favorites.some(fav => fav.cca3 === item.cca3)}
+          onFavoriteToggle={() => onToggleFavorite(item)}
+        />
+      )}
+      ListEmptyComponent={() => (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyText}>Aradığınız ülke bulunamadı.</Text>
+          <Text style={styles.emptyText}>Belki de böyle bir ülke yoktur :P</Text>
+        </View>
+      )}
+    />
+  </View>
   );
 }
 
