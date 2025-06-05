@@ -1,9 +1,18 @@
-import React from 'react';
 import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
+import { TouchableOpacity } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
+import React from 'react';
 
-function CountryDetailScreen(props) {
-  console.log('Props:', props);
-  const country = props.route?.params?.country || {
+function CountryDetailScreen({
+  route,
+  isFavorite,
+  visited = [],
+  wantToVisit = [],
+  noPlan = [],
+  onToggleFavorite,
+  onSetVisitStatus,
+}) {
+  const country = route?.params?.country || {
     name: { common: 'Test Ülkesi' },
     flags: { png: 'https://restcountries.com/data/usa.svg' },
     capital: ['Test Başkenti'],
@@ -22,10 +31,64 @@ function CountryDetailScreen(props) {
     ? Object.values(country.currencies).map(c => c.name).join(', ')
     : 'Bilinmiyor';
 
+  const isVisited = visited.some(c => c.cca3 === country.cca3);
+  const isWantToVisit = wantToVisit.some(c => c.cca3 === country.cca3);
+  const isNoPlan = noPlan.some(c => c.cca3 === country.cca3);
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Image source={{ uri: country.flags.png }} style={styles.flag} />
       <Text style={styles.name}>{country.name.common}</Text>
+      <View style={styles.buttonRow}>
+        <TouchableOpacity
+          style={[
+            styles.visitButton,
+            isVisited && styles.selectedButton,
+          ]}
+          onPress={() => onSetVisitStatus('visited', country)}
+        >
+          <MaterialIcons name="check-circle" size={24} color="#388E3C" />
+          <Text style={styles.buttonText}>Ziyaret Ettim</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.visitButton,
+            isWantToVisit && styles.selectedButton,
+          ]}
+          onPress={() => onSetVisitStatus('wantToVisit', country)}
+        >
+          <MaterialIcons name="star-border" size={24} color="#1976D2" />
+          <Text style={styles.buttonText}>Ziyaret Edeceğim</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.visitButton,
+            isNoPlan && styles.selectedButton,
+          ]}
+          onPress={() => onSetVisitStatus('noPlan', country)}
+        >
+          <MaterialIcons name="block" size={24} color="#D32F2F" />
+          <Text style={styles.buttonText}>Planım Yok</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.visitButton,
+            isFavorite && styles.selectedButton,
+          ]}
+          onPress={() => onToggleFavorite(country)}
+        >
+          <MaterialIcons name={isFavorite ? "favorite" : "favorite-border"} size={24} color="#E91E63" />
+          <Text style={styles.buttonText}>{isFavorite ? "Favorilerde" : "Favorilere Ekle"}</Text>
+        </TouchableOpacity>
+      </View>
+      {(isVisited || isWantToVisit || isNoPlan || isFavorite) && (
+        <Text style={styles.statusText}>
+          {isVisited ? 'Bu ülkeyi ziyaret ettiniz.\n' : ''}
+          {isWantToVisit ? 'Bu ülkeyi ziyaret etmek istiyorsunuz.\n' : ''}
+          {isNoPlan ? 'Bu ülke için planınız yok.\n' : ''}
+          {isFavorite ? 'Bu ülke favorilerinizde.' : ''}
+        </Text>
+      )}
 
       <View style={styles.infoBox}>
         <Text style={styles.label}>Başkent:</Text>
@@ -77,6 +140,37 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 24,
     color: '#1A237E',
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginVertical: 16,
+  },
+  visitButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F1F8E9',
+    padding: 10,
+    borderRadius: 8,
+    marginHorizontal: 8,
+    marginVertical: 4,
+  },
+  selectedButton: {
+    backgroundColor: '#C8E6C9',
+    borderWidth: 1,
+    borderColor: '#388E3C',
+  },
+  buttonText: {
+    marginLeft: 8,
+    fontSize: 16,
+    color: '#333',
+  },
+  statusText: {
+    fontSize: 16,
+    color: '#1976D2',
+    marginBottom: 12,
+    textAlign: 'center',
   },
   infoBox: {
     width: '100%',
