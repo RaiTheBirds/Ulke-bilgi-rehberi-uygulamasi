@@ -4,14 +4,14 @@ import { Ionicons } from '@expo/vector-icons';
 
 export default function CountryCard({ country, onPress, isFavorite, onFavoriteToggle }) {
   return (
-    <TouchableOpacity style={styles.card} onPress={onPress}>
+    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.85}>
       <Image source={{ uri: country.flags.png }} style={styles.flag} />
       <View style={styles.info}>
         <Text style={styles.name}>{country.name.common}</Text>
         <Text style={styles.region}>{country.region}</Text>
       </View>
       <TouchableOpacity onPress={onFavoriteToggle} style={styles.favoriteIcon}>
-        <Ionicons name={isFavorite ? "star" : "star-outline"} size={24} color="#FFD700" />
+        <Ionicons name={isFavorite ? "star" : "star-outline"} size={28} color={isFavorite ? "#FFD700" : "#B0BEC5"} />
       </TouchableOpacity>
     </TouchableOpacity>
   );
@@ -20,30 +20,44 @@ export default function CountryCard({ country, onPress, isFavorite, onFavoriteTo
 const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
-    backgroundColor: '#F1F8E9',
-    padding: 10,
-    borderRadius: 10,
-    marginBottom: 10,
+    backgroundColor: '#fff',
+    padding: 14,
+    borderRadius: 16,
+    marginBottom: 14,
     alignItems: 'center',
+    shadowColor: '#1565C0',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 4,
   },
   flag: {
-    width: 60,
-    height: 40,
+    width: 56,
+    height: 38,
     resizeMode: 'contain',
-    marginRight: 12,
+    marginRight: 14,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: '#E3F2FD',
+    backgroundColor: '#E3F2FD',
   },
   info: {
     flex: 1,
+    justifyContent: 'center',
   },
   name: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
+    color: '#1976D2',
+    marginBottom: 2,
   },
   region: {
     fontSize: 14,
-    color: '#555',
+    color: '#78909C',
   },
   favoriteIcon: {
     padding: 8,
+    borderRadius: 20,
+    backgroundColor: '#F1F8E9',
   },
 });
