@@ -40,8 +40,8 @@ npx expo start
 Kopyala
 Düzenle
 Ulke-bilgi-rehberi-uygulamasi/
-├── components/       # Header, Footer, CountryList gibi bileşenler
-├── screens/          # Ana ekran ve detay ekranı
+├── components/       # CountryCard ve SearchBar bileşenleri
+├── screens/          # Ana ekran ve diğer içerik ekranları
 ├── assets/           # Görseller, ikonlar
 ├── App.js            # Giriş noktası
 └── README.md         # Bu dosya
