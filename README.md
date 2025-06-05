@@ -32,3 +32,19 @@ git clone https://github.com/RaiTheBirds/Ulke-bilgi-rehberi-uygulamasi.git
 cd Ulke-bilgi-rehberi-uygulamasi
 npm install
 npx expo start
+```
+📱 Expo Go uygulamasıyla QR kodu tarayarak uygulamayı test edebilirsiniz.
+
+📁 Klasör Yapısı
+```bash
+Kopyala
+Düzenle
+Ulke-bilgi-rehberi-uygulamasi/
+├── components/       # Header, Footer, CountryList gibi bileşenler
+├── screens/          # Ana ekran ve detay ekranı
+├── assets/           # Görseller, ikonlar
+├── App.js            # Giriş noktası
+└── README.md         # Bu dosya
+```
+🧠 Katkıda Bulunmak
+Pull request'lere ve issue'lara her zaman açığım. Daha iyi bir kullanıcı deneyimi için önerilerinizi bekliyorum. 😊
