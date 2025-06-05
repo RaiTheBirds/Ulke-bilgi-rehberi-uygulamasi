@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
+import MapView, { Marker } from 'react-native-maps';
 
 function CountryDetailScreen({
   route,
@@ -21,6 +22,7 @@ function CountryDetailScreen({
     languages: { eng: 'English' },
     currencies: { USD: { name: 'US Dollar' } },
     subregion: 'Test Alt Bölge',
+    latlng: [39.0, -95.0],
   };
 
   const languages = country.languages
@@ -35,10 +37,31 @@ function CountryDetailScreen({
   const isWantToVisit = wantToVisit.some(c => c.cca3 === country.cca3);
   const isNoPlan = noPlan.some(c => c.cca3 === country.cca3);
 
+  const hasLatLng = country.latlng && country.latlng.length === 2;
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Image source={{ uri: country.flags.png }} style={styles.flag} />
       <Text style={styles.name}>{country.name.common}</Text>
+      {hasLatLng && (
+        <MapView
+          style={styles.map}
+          initialRegion={{
+            latitude: country.latlng[0],
+            longitude: country.latlng[1],
+            latitudeDelta: 10,
+            longitudeDelta: 10,
+          }}
+        >
+          <Marker
+            coordinate={{
+              latitude: country.latlng[0],
+              longitude: country.latlng[1],
+            }}
+            title={country.name.common}
+          />
+        </MapView>
+      )}
       <View style={styles.buttonRow}>
         <TouchableOpacity
           style={[
@@ -133,6 +156,12 @@ const styles = StyleSheet.create({
     width: 200,
     height: 120,
     resizeMode: 'contain',
+    marginBottom: 16,
+  },
+  map: {
+    width: '100%',
+    height: 200,
+    borderRadius: 12,
     marginBottom: 16,
   },
   name: {
