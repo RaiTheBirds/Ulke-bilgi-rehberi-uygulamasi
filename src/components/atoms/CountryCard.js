@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import * as Animatable from 'react-native-animatable';
 
 export default function CountryCard({ country, onPress, isFavorite, onFavoriteToggle }) {
+  const favIconRef = useRef(null);
+
+  const handleFavorite = () => {
+    if (favIconRef.current) {
+      favIconRef.current.bounceIn();
+    }
+    onFavoriteToggle();
+  };
+
   return (
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.85}>
       <Image source={{ uri: country.flags.png }} style={styles.flag} />
@@ -10,8 +20,10 @@ export default function CountryCard({ country, onPress, isFavorite, onFavoriteTo
         <Text style={styles.name}>{country.name.common}</Text>
         <Text style={styles.region}>{country.region}</Text>
       </View>
-      <TouchableOpacity onPress={onFavoriteToggle} style={styles.favoriteIcon}>
-        <Ionicons name={isFavorite ? "star" : "star-outline"} size={28} color={isFavorite ? "#FFD700" : "#B0BEC5"} />
+      <TouchableOpacity onPress={handleFavorite} style={styles.favoriteIcon}>
+        <Animatable.View ref={favIconRef} duration={600} useNativeDriver>
+          <Ionicons name={isFavorite ? "heart" : "heart-outline"} size={28} color={isFavorite ? "#E91E63" : "#B0BEC5"} />
+        </Animatable.View>
       </TouchableOpacity>
     </TouchableOpacity>
   );
@@ -58,6 +70,6 @@ const styles = StyleSheet.create({
   favoriteIcon: {
     padding: 8,
     borderRadius: 20,
-    backgroundColor: '#F1F8E9',
+    backgroundColor: '#ffffff',
   },
 });
