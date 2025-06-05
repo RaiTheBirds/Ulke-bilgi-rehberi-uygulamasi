@@ -7,10 +7,10 @@ export default function CountryCard({ country, onPress, isFavorite, onFavoriteTo
   const favIconRef = useRef(null);
 
   const handleFavorite = () => {
+        onFavoriteToggle();
     if (favIconRef.current) {
       favIconRef.current.bounceIn();
     }
-    onFavoriteToggle();
   };
 
   return (
@@ -21,7 +21,7 @@ export default function CountryCard({ country, onPress, isFavorite, onFavoriteTo
         <Text style={styles.region}>{country.region}</Text>
       </View>
       <TouchableOpacity onPress={handleFavorite} style={styles.favoriteIcon}>
-        <Animatable.View ref={favIconRef} duration={600} useNativeDriver>
+        <Animatable.View ref={favIconRef} duration={1000} useNativeDriver>
           <Ionicons name={isFavorite ? "heart" : "heart-outline"} size={28} color={isFavorite ? "#E91E63" : "#B0BEC5"} />
         </Animatable.View>
       </TouchableOpacity>
